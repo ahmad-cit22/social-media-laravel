@@ -30,9 +30,8 @@ class ProfileController extends Controller
         return view('pages.profile.edit', ['user' => $user]);
     }
 
-    public function updateProfile(Request $request)
+    public function update(Request $request)
     {
-        // dd($request->all());
         if (!session()->has('user_id')) {
             return redirect()->route('login')->with('error', 'Please login first to update your profile.');
         }
@@ -56,10 +55,6 @@ class ProfileController extends Controller
             if (!Hash::check($request->password, $user->password)) {
                 return back()->with('error', 'Incorrect password provided.');
             }
-
-            // if ($validated['new_password'] !== $validated['new_password_confirmation']) {
-            //     return back()->with('error', 'New password and confirmation password do not match.');
-            // }
 
             $validated['new_password'] = Hash::make($validated['new_password']);
 

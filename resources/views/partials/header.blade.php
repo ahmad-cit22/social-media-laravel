@@ -21,8 +21,8 @@
                                 <span class="sr-only">Open user menu</span>
                                 <div class="flex gap-2" style="align-items: center">
                                     <img class="h-8 w-8 rounded-full"
-                                        src="{{ asset('images/profile') . '/' . $user->avatar }}"
-                                        alt="{{ $user->first_name . ' ' . $user->last_name }}" />
+                                        src="{{ $user->avatar ? asset('images/profile') . '/' . $user->avatar : asset('images/profile/def-avatar.jpg') }}"
+                                        alt="image-{{ $user->first_name . ' ' . $user->last_name }}" />
                                     <span>{{ $user->first_name . ' ' . $user->last_name }}</span>
                                 </div>
                             </button>

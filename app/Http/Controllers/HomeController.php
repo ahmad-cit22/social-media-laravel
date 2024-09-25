@@ -10,7 +10,7 @@ class HomeController extends Controller
     public function index()
     {
         if (!session()->has('user_id')) {
-            return redirect()->route('login')->with('error', 'Please login to access your profile.');
+            return redirect()->route('login')->with('error', 'Please login to access news feed.');
         }
 
         $user = DB::table('users')->where('id', session('user_id'))->first();
