@@ -40,4 +40,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class, 'author_id');
     }
+
+    public function fullName(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }

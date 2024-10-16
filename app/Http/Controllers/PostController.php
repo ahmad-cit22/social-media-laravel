@@ -17,17 +17,17 @@ class PostController extends Controller
 
     public function create()
     {
-        return view('posts.create');
+        //
     }
 
     public function store(PostRequest $request)
     {
         Post::create([
-            'author_id' => Auth::id(),
+            'author_id' => session('user_id'),
             'content' => $request->content,
         ]);
 
-        return redirect()->route('posts.index')->with('success', 'Post created successfully.');
+        return redirect()->route('home')->with('success', 'Post created successfully.');
     }
 
     public function edit(Post $post)

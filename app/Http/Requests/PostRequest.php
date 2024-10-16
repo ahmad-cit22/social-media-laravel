@@ -11,7 +11,7 @@ class PostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return session('user_id') != null;
     }
 
     /**
@@ -23,6 +23,13 @@ class PostRequest extends FormRequest
     {
         return [
             'content' => ['required', 'string', 'max:255'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'required' => "You can't submit empty post!",
         ];
     }
 }
