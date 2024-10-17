@@ -29,7 +29,7 @@ class PostRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'required' => "You can't submit empty post!",
+            'required' => "Empty content! Please write your post properly.",
         ];
     }
 }

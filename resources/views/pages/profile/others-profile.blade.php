@@ -8,20 +8,20 @@
             <!-- Profile Info -->
             <div class="flex gap-4 justify-center flex-col text-center items-center">
                 <!-- Profile Picture -->
-                <img src="{{ $user->avatar ? asset('images/profile') . '/' . $user->avatar : asset('images/profile/def-avatar.jpg') }}"
+                <img src="{{ $other_user->avatar ? asset('images/profile') . '/' . $other_user->avatar : asset('images/profile/def-avatar.jpg') }}"
                     class="w-32 h-32 rounded-full border-2 object-cover"
-                    alt="image-{{ $user->first_name . ' ' . $user->last_name }}">
+                    alt="image-{{ $other_user->first_name . ' ' . $other_user->last_name }}">
 
                 <!-- User Meta -->
                 <div>
-                    <h1 class="font-bold md:text-2xl">{{ $user->first_name . ' ' . $user->last_name }}</h1>
-                    <p class="text-gray-500 text-sm mb-1">{{ '@' . $user->username }}</p>
-                    <p class="text-gray-700">{{ $user->bio ?? 'No bio added yet' }}</p>
+                    <h1 class="font-bold md:text-2xl">{{ $other_user->first_name . ' ' . $other_user->last_name }}</h1>
+                    <p class="text-gray-500 text-sm mb-1">{{ '@' . $other_user->username }}</p>
+                    <p class="text-gray-700">{{ $other_user->bio ?? 'No bio added yet' }}</p>
                 </div>
                 <!-- / User Meta -->
             </div>
             <!-- /Profile Info -->
-            @if (session('user_id') && session('user_id') === $user->id)
+            @if (session('user_id') && session('user_id') === $other_user->id)
                 <!-- Edit Profile Button (Only visible to the profile owner) -->
                 <a href="{{ route('edit-profile') }}" type="button"
                     class="-m-2 flex gap-2 items-center rounded-full px-4 py-2 font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700">

@@ -15,15 +15,15 @@
                         <div class="text-gray-700 font-normal w-full">
                             <textarea
                                 class="block w-full p-2 pt-2 text-gray-900 rounded-lg border-none outline-none focus:ring-0 focus:ring-offset-0"
-                                name="content" rows="2" placeholder="What's going on, {{ $user->first_name }}?"></textarea>
+                                name="content" rows="2" placeholder="What's going on, {{ $user->first_name }}? (Write within 250 characters)"></textarea>
                         </div>
                     </div>
                 </div>
                 @error('content')
-                            <div class="text-sm text-red-600">
-                                {{ $message }}
-                            </div>
-                        @enderror
+                    <div class="text-sm text-red-600">
+                        {{ $message }}
+                    </div>
+                @enderror
 
                 <!-- Create Post Card Bottom -->
 
@@ -63,11 +63,13 @@
 
                                 <!-- User Info -->
                                 <div class="text-gray-900 flex flex-col min-w-0 flex-1">
-                                    <a href="profile.html" class="hover:underline font-semibold line-clamp-1">
+                                    <a href="{{ route('profile.show', $post->author_id) }}"
+                                        class="hover:underline font-semibold line-clamp-1">
                                         {{ $post->author->fullName() }}
                                     </a>
 
-                                    <a href="profile.html" class="hover:underline text-sm text-gray-500 line-clamp-1">
+                                    <a href="{{ route('profile.show', $post->author_id) }}"
+                                        class="hover:underline text-sm text-gray-500 line-clamp-1">
                                         {{ '@' . $post->author->username }}
                                     </a>
                                 </div>
@@ -97,10 +99,24 @@
                                         class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                         role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
                                         tabindex="-1">
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            role="menuitem" tabindex="-1" id="user-menu-item-0">Edit</a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            role="menuitem" tabindex="-1" id="user-menu-item-1">Delete</a>
+                                        <a href="{{ route('posts.show', $post->id) }}"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
+                                            tabindex="-1" id="user-menu-item-1">View</a>
+                                        @if (session('user_id') && session('user_id') === $post->author_id)
+                                            <a href="{{ route('posts.edit', $post->id) }}"
+                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                role="menuitem" tabindex="-1" id="user-menu-item-0">Edit</a>
+                                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
+                                                class="block">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    role="menuitem" tabindex="-1" id="user-menu-item-1">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -112,7 +128,7 @@
                     <!-- Content -->
                     <div class="py-4 text-gray-700 font-normal">
                         <p>
-                            {!! $post->content !!}
+                            {{ $post->content }}
                         </p>
                     </div>
 

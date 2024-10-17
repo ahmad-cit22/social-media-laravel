@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -14,9 +15,16 @@ class ProfileController extends Controller
             return redirect()->route('login')->with('error', 'Please login first to access your profile.');
         }
 
-        $user = DB::table('users')->where('id', session('user_id'))->first();
+        $user = User::where('id', session('user_id'))->first();
 
         return view('pages.profile.index', ['user' => $user]);
+    }
+
+    public function show(User $user)
+    {
+        $auth_user = User::where('id', session('user_id'))->first();
+
+        return view('pages.profile.others-profile', ['other_user' => $user, 'user' => $auth_user]);
     }
 
     public function edit()
@@ -25,7 +33,7 @@ class ProfileController extends Controller
             return redirect()->route('login')->with('error', 'Please login first to edit your profile.');
         }
 
-        $user = DB::table('users')->where('id', session('user_id'))->first();
+        $user = User::where('id', session('user_id'))->first();
 
         return view('pages.profile.edit', ['user' => $user]);
     }

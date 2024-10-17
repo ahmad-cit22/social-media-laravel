@@ -32,6 +32,7 @@ Route::any('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('edit-profile');
 Route::post('/update-profile', [ProfileController::class, 'update'])->name('update-profile');
+Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 
 // posts routes
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');

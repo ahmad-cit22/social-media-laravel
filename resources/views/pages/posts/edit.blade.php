@@ -2,25 +2,35 @@
 
 @section('content')
     <main class="container max-w-2xl mx-auto space-y-8 mt-8 px-2 min-h-screen">
-        <!-- Barta Create Post Card -->
-        <form method="POST" enctype="multipart/form-data"
+        <h3>Update Post</h3>
+        <!-- Barta Update Post Card -->
+        <form action="{{ route('posts.update', $post->id) }}" method="POST" enctype="multipart/form-data"
             class="bg-white border-2 border-black rounded-lg shadow mx-auto max-w-none px-4 py-5 sm:px-6 space-y-3">
-            <!-- Create Post Card Top -->
+            @method('PUT')
+            @csrf
+            <!-- Update Post Card Top -->
             <div>
                 <div class="flex items-start /space-x-3/">
                     <!-- Content -->
                     <div class="text-gray-700 font-normal w-full">
                         <textarea
                             class="block w-full p-2 pt-2 text-gray-900 rounded-lg border-none outline-none focus:ring-0 focus:ring-offset-0"
-                            name="barta" rows="2" placeholder="What's going on, Shamim?"></textarea>
+                            name="content" rows="2" placeholder="Update Post (Write within 250 characters)">{{ $post->content }}</textarea>
                     </div>
                 </div>
             </div>
+            @error('content')
+                <div class="text-sm text-red-600">
+                    {{ $message }}
+                </div>
+            @enderror
 
-            <!-- Create Post Card Bottom -->
+            <!-- Update Post Card Bottom -->
+
             <div>
                 <!-- Card Bottom Action Buttons -->
                 <div class="flex items-center justify-end">
+
                     <div>
                         <!-- Post Button -->
                         <button type="submit"
@@ -32,8 +42,8 @@
                 </div>
                 <!-- /Card Bottom Action Buttons -->
             </div>
-            <!-- /Create Post Card Bottom -->
+            <!-- /Update Post Card Bottom -->
         </form>
-        <!-- /Barta Create Post Card -->
+        <!-- /Barta Update Post Card -->
     </main>
 @endsection
