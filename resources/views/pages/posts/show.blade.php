@@ -14,7 +14,7 @@
                             <div class="text-gray-900 flex flex-col min-w-0 flex-1">
                                 <a href="{{ route('profile.show', $post->author_id) }}"
                                     class="hover:underline font-semibold line-clamp-1">
-                                    {{ $post->author->fullName() }}
+                                    {{ $post->author->fullName }}
                                 </a>
 
                                 <a href="{{ route('profile.show', $post->author_id) }}"

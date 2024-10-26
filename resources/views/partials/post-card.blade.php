@@ -9,7 +9,7 @@
                 <div class="text-gray-900 flex flex-col min-w-0 flex-1">
                     <a href="{{ route('profile.show', $post->author_id) }}"
                         class="hover:underline font-semibold line-clamp-1">
-                        {{ $post->author->fullName() }}
+                        {{ $post->author->fullName }}
                         @if (Auth::user() && Auth::id() === $post->author_id)
                             <span class="ml-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                 Its you

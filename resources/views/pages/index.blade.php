@@ -11,8 +11,7 @@
                     <div class="text-gray-700 font-normal w-full">
                         <textarea
                             class="block w-full p-2 pt-2 text-gray-900 rounded-lg border-none outline-none focus:ring-0 focus:ring-offset-0"
-                            name="content" rows="2"
-                            placeholder="What's going on, {{ Auth::user()->first_name }}?"></textarea>
+                            name="content" rows="2" placeholder="What's going on, {{ Auth::user()->first_name }}?"></textarea>
                     </div>
                 </div>
                 @error('content')
@@ -32,6 +31,45 @@
 
         <!-- Newsfeed -->
         <section id="newsfeed" class="space-y-6">
+            @if ($search)
+                <p class="text-center text-md text-gray-700 flex items-center justify-center">
+                    Showing search results for <strong class="ml-1">{{ $search }}</strong>
+                    <a href="{{ route('home') }}" class="ml-1 inline text-white text-xs items-center rounded-full p-1 bg-gray-800 hover:bg-black">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </a>
+                </p>
+
+                <!-- Searched Users Section -->
+                <section class="bg-white border-2 border-gray-300 rounded-lg p-4 space-y-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Users</h3>
+                    @if ($users->isNotEmpty())
+                        <ul class="space-y-2">
+                            @foreach ($users as $user)
+                                <li class="flex items-center space-x-4">
+                                    <a href="{{ route('profile.show', $user->id) }}">
+                                        <img src="{{ asset('images/profile') . '/' . $user->avatar }}"
+                                            alt="{{ $user->username }}'s profile picture" class="w-10 h-10 rounded-full">
+                                    </a>
+                                    <a href="{{ route('profile.show', $user->id) }}">
+                                        <div>
+                                            <p class="text-gray-800 font-semibold text-underline">{{ $user->fullName }}</p>
+                                            <p class="text-sm text-gray-500">
+                                                {{ '@' . $user->username . ' . ' . Str::limit($user->email, 20) }}</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-center text-gray-500">No users found.</p>
+                    @endif
+                </section>
+            @endif
+            @if ($search)
+                <h3 class="text-lg font-semibold text-gray-800">Posts</h3>
+            @endif
             @include('partials.post-list', ['posts' => $posts])
             @if ($posts->hasMorePages())
                 <button id="load-more"
@@ -47,10 +85,10 @@
         document.getElementById('load-more').addEventListener('click', function() {
             const button = this;
             const nextPageUrl = button.getAttribute('data-next-page');
-            console.log(nextPageUrl);
+            const searchQuery = document.querySelector('input[name="search"]').value;
 
             if (nextPageUrl) {
-                fetch(nextPageUrl, {
+                fetch(`${nextPageUrl}&search=${encodeURIComponent(searchQuery)}`, {
                         headers: {
                             'Accept': 'application/json'
                         }
