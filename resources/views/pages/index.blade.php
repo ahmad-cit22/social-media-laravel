@@ -49,7 +49,7 @@
                             @foreach ($users as $user)
                                 <li class="flex items-center space-x-4">
                                     <a href="{{ route('profile.show', $user->id) }}">
-                                        <img src="{{ asset('storage/' . $user->avatar) }}"
+                                        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('storage/avatars/def-avatar.jpg') }}"
                                             alt="{{ $user->fullName }}'s profile picture" class="w-10 h-10 rounded-full">
                                     </a>
                                     <a href="{{ route('profile.show', $user->id) }}">

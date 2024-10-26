@@ -23,7 +23,8 @@
                                 <input class="hidden" type="file" name="avatar" id="avatar"
                                     onchange="readURL(this);" />
                                 <img id="avatar-preview" class="h-32 w-32 rounded-full"
-                                    src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->fullName }}" />
+                                    src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('storage/avatars/def-avatar.jpg') }}"
+                                    alt="{{ $user->fullName }}" />
                                 <label for="avatar">
                                     <div
                                         class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 hover:cursor-pointer">

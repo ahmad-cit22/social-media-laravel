@@ -8,7 +8,7 @@
             <!-- Profile Info -->
             <div class="flex gap-4 justify-center flex-col text-center items-center">
                 <!-- Profile Picture -->
-                <img src="{{ asset('storage/' . $user->avatar) }}"
+                <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('storage/avatars/def-avatar.jpg') }}"
                     class="w-32 h-32 rounded-full border-2 object-cover"
                     alt="image-{{ $user->fullName }}">
 
