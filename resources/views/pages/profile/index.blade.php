@@ -8,13 +8,13 @@
             <!-- Profile Info -->
             <div class="flex gap-4 justify-center flex-col text-center items-center">
                 <!-- Profile Picture -->
-                <img src="{{ $user->avatar ? asset('images/profile') . '/' . $user->avatar : asset('images/profile/def-avatar.jpg') }}"
+                <img src="{{ asset('storage/' . $user->avatar) }}"
                     class="w-32 h-32 rounded-full border-2 object-cover"
-                    alt="image-{{ $user->first_name . ' ' . $user->last_name }}">
+                    alt="image-{{ $user->fullName }}">
 
                 <!-- User Meta -->
                 <div>
-                    <h1 class="font-bold md:text-2xl">{{ $user->first_name . ' ' . $user->last_name }}</h1>
+                    <h1 class="font-bold md:text-2xl">{{ $user->fullName }}</h1>
                     <p class="text-gray-500 text-sm mb-1">{{ '@' . $user->username }}</p>
                     <p class="text-gray-700">{{ $user->bio ?? 'No bio added yet' }}</p>
                 </div>

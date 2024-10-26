@@ -44,7 +44,7 @@
                                     <span class="sr-only">Open user menu</span>
                                     <div class="flex gap-2" style="align-items: center">
                                         <img class="h-8 w-8 rounded-full"
-                                            src="{{ Auth::user()->avatar ? asset('images/profile') . '/' . Auth::user()->avatar : asset('images/profile/def-avatar.jpg') }}"
+                                            src="{{ asset('storage/' . Auth::user()->avatar) }}"
                                             alt="image-{{ Auth::user()->fullName }}" />
                                         <span>{{ Auth::user()->fullName }}</span>
                                     </div>

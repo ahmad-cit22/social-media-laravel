@@ -3,7 +3,7 @@
 @section('content')
     <main class="container max-w-xl mx-auto space-y-8 mt-8 px-2 md:px-0 min-h-screen">
         <!-- Profile Edit Form -->
-        <form action="{{ route('profile.update', $user->id) }}" method="POST">
+        <form action="{{ route('profile.update', $user->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="space-y-12">
@@ -17,6 +17,27 @@
                     </p>
 
                     <div class="mt-10 border-b border-gray-900/10 pb-12">
+                        <div class="col-span-full mt-10 pb-10">
+                            <label for="avatar" class="block text-sm font-medium leading-6 text-gray-900">Photo</label>
+                            <div class="mt-2 flex items-center gap-x-3">
+                                <input class="hidden" type="file" name="avatar" id="avatar"
+                                    onchange="readURL(this);" />
+                                <img id="avatar-preview" class="h-32 w-32 rounded-full"
+                                    src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->fullName }}" />
+                                <label for="avatar">
+                                    <div
+                                        class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 hover:cursor-pointer">
+                                        Change
+                                    </div>
+                                </label>
+                                @error('avatar')
+                                    <div class="text-sm text-red-600">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div class="sm:col-span-3">
                                 <label for="first_name" class="block text-sm font-medium leading-6 text-gray-900">First
@@ -159,3 +180,17 @@
         <!-- /Profile Edit Form -->
     </main>
 @endsection
+
+@push('custom-scripts')
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatar-preview').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+@endpush

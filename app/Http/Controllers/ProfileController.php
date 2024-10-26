@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +28,6 @@ class ProfileController extends Controller
 
     public function edit(User $user)
     {
-        // dd(11);
         if (!$this->isAuthorized($user)) {
             return back()->with('error', 'Sorry! You are not authorized for this action.');
         }
@@ -36,30 +35,20 @@ class ProfileController extends Controller
         return view('pages.profile.edit', ['user' => $user]);
     }
 
-    public function update(Request $request, User $user)
+    public function update(ProfileUpdateRequest $request, User $user)
     {
         if (!$this->isAuthorized($user)) {
             return back()->with('error', 'Sorry! You are not authorized for this action.');
         }
 
-        $validated = $request->validate([
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'username' => ['required', 'string', 'max:255', 'alpha_num', 'unique:users,username,' . $user->id],
-            'bio' => ['nullable', 'string', 'max:255'],
-            'new_password' => ['nullable', 'string', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', 'max:16', 'confirmed'],
-            'profile_picture' => ['nullable', 'image', 'max:1024'],
-        ], [
-            'new_password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
-        ]);
+        $validated = $request->validated();
 
-        if ($request->hasFile('profile_picture')) {
-            if ($user->profile_picture && Storage::exists($user->profile_picture)) {
-                Storage::delete($user->profile_picture);
+        if ($request->hasFile('avatar')) {
+            if (Storage::exists($user->avatar)) {
+                Storage::delete($user->avatar);
             }
-            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-            $user->profile_picture = $path;
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $path;
         }
 
         if ($request->new_password !== null) {

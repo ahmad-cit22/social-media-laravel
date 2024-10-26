@@ -49,8 +49,8 @@
                             @foreach ($users as $user)
                                 <li class="flex items-center space-x-4">
                                     <a href="{{ route('profile.show', $user->id) }}">
-                                        <img src="{{ asset('images/profile') . '/' . $user->avatar }}"
-                                            alt="{{ $user->username }}'s profile picture" class="w-10 h-10 rounded-full">
+                                        <img src="{{ asset('storage/' . $user->avatar) }}"
+                                            alt="{{ $user->fullName }}'s profile picture" class="w-10 h-10 rounded-full">
                                     </a>
                                     <a href="{{ route('profile.show', $user->id) }}">
                                         <div>
@@ -70,7 +70,7 @@
             @if ($search)
                 <h3 class="text-lg font-semibold text-gray-800">Posts</h3>
             @endif
-            @include('partials.post-list', ['posts' => $posts])
+            @include('partials.post-list')
             @if ($posts->hasMorePages())
                 <button id="load-more"
                     class="bg-gray-700 hover:bg-gray-900 text-white font-semibold px-4 py-2 rounded-full mx-auto block"
