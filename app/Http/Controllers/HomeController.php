@@ -3,37 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $latestPosts = Post::select('posts.*')
-            ->join(DB::raw('(SELECT MAX(id) as latest_post_id FROM posts GROUP BY author_id) as latest_posts'), function ($join) {
-                $join->on('posts.id', '=', 'latest_posts.latest_post_id');
+        $posts = Post::with('author')
+            ->select('posts.*')
+            ->join(DB::raw('(SELECT author_id, MAX(created_at) as latest_post FROM posts GROUP BY author_id) as latest_by_author'), function ($join) {
+                $join->on('posts.author_id', '=', 'latest_by_author.author_id')
+                    ->on('posts.created_at', '=', 'latest_by_author.latest_post');
             })
-            ->with('author') // Eager load the author relationship
-            ->latest() // Order by most recent post
-            ->get();
-
-        // Get the remaining posts (excluding the latest ones)
-        $remainingPosts = Post::select('posts.*')
-            ->whereNotIn('posts.id', $latestPosts->pluck('id')->toArray()) // Exclude the latest posts
-            ->join(DB::raw('(SELECT MAX(id) as post_id FROM posts WHERE id NOT IN (' . implode(',', $latestPosts->pluck('id')->toArray()) . ') GROUP BY author_id) as remaining_posts'), function ($join) {
-                $join->on('posts.id', '=', 'remaining_posts.post_id');
-            })
-            ->with('author')
             ->latest()
-            ->get();
+            ->paginate(10);
 
-        // Merge the collections (latest posts first, then the remaining posts)
-        $allPosts = $latestPosts->merge($remainingPosts);
-
-        return view('pages.index', ['posts' => $allPosts]);
+        return view('pages.index', ['posts' => $posts]);
     }
 
+    public function loadMorePosts(Request $request)
+    {
+        $page = $request->input('page', 1);
+        $posts = Post::with('author')
+            ->select('posts.*')
+            ->join(DB::raw('(SELECT author_id, MAX(created_at) as latest_post FROM posts GROUP BY author_id) as latest_by_author'), function ($join) {
+                $join->on('posts.author_id', '=', 'latest_by_author.author_id')
+                    ->on('posts.created_at', '=', 'latest_by_author.latest_post');
+            })
+            ->latest()
+            ->paginate(10, ['*'], 'page', $page);
+
+        return response()->json([
+            'posts' => view('partials.post-list', ['posts' => $posts])->render(),
+            'next_page_url' => $posts->nextPageUrl(),
+        ]);
+    }
 }

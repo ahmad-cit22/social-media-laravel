@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/load-more-posts', [HomeController::class, 'loadMorePosts'])->name('posts.load-more');
+Route::get('/load-more-posts', [HomeController::class, 'loadMorePosts'])->name('home.load-more');
 
 
 // auth routes
