@@ -10,8 +10,25 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Search input -->
+                <form action="{{ route('home.search') }}" method="GET" class="flex items-center">
+                    @csrf
+                    <input type="text" name="query" placeholder="Search..."
+                        class="border-2 border-gray-300 bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none" />
+                    <button type="submit" class="ml-2 flex items-center bg-gray-800 hover:bg-black text-white font-semibold rounded-full p-2">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </form>
                 @auth
                     <div class="hidden sm:ml-6 sm:flex gap-2 sm:items-center">
+
+                        @if (request()->routeIs('home') === false)
+                            <a href="{{ route('posts.create') }}"
+                                class="text-gray-900 hover:text-white border-2 border-gray-800 hover:bg-gray-900 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden md:block">
+                                Create Post
+                            </a>
+                        @endif
 
                         <!-- Profile dropdown -->
                         <div class="relative ml-3" x-data="{ open: false }">

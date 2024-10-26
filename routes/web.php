@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/load-more-posts', [HomeController::class, 'loadMorePosts'])->name('home.load-more');
-
+Route::get('/search', [HomeController::class, 'search'])->name('home.search');
 
 // auth routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register-form');
