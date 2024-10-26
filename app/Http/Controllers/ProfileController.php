@@ -21,28 +21,26 @@ class ProfileController extends Controller
 
     public function show(User $user)
     {
-        return view('pages.profile.others-profile', [
-            'other_user' => $user,
-            'user' => Auth::user(),
+        return view('pages.profile.index', [
+            'user' => $user,
         ]);
     }
 
-    public function edit()
+    public function edit(User $user)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please login first to edit your profile.');
+        // dd(11);
+        if (!$this->isAuthorized($user)) {
+            return back()->with('error', 'Sorry! You are not authorized for this action.');
         }
 
-        return view('pages.profile.edit', ['user' => Auth::user()]);
+        return view('pages.profile.edit', ['user' => $user]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, User $user)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please login first to update your profile.');
+        if (!$this->isAuthorized($user)) {
+            return back()->with('error', 'Sorry! You are not authorized for this action.');
         }
-
-        $user = Auth::user();
 
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
@@ -80,7 +78,16 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->route('edit-profile')->with('success', 'Profile updated successfully.');
+        return redirect()->route('profile.edit', $user->id)->with('success', 'Profile updated successfully.');
+    }
+
+    protected function isAuthorized(User $user)
+    {
+        if (!Auth::check() || Auth::id() !== $user->id) {
+            return false;
+        }
+
+        return true;
     }
 
 }

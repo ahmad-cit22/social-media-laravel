@@ -10,7 +10,7 @@
                         </a>
                     </div>
                 </div>
-                @if(session('user_id'))
+                @auth
                     <div class="hidden sm:ml-6 sm:flex gap-2 sm:items-center">
 
                         <!-- Profile dropdown -->
@@ -22,9 +22,9 @@
                                     <span class="sr-only">Open user menu</span>
                                     <div class="flex gap-2" style="align-items: center">
                                         <img class="h-8 w-8 rounded-full"
-                                            src="{{ $user->avatar ? asset('images/profile') . '/' . $user->avatar : asset('images/profile/def-avatar.jpg') }}"
-                                            alt="image-{{ $user->fullName() }}" />
-                                        <span>{{ $user->fullName() }}</span>
+                                            src="{{ Auth::user()->avatar ? asset('images/profile') . '/' . Auth::user()->avatar : asset('images/profile/def-avatar.jpg') }}"
+                                            alt="image-{{ Auth::user()->fullName() }}" />
+                                        <span>{{ Auth::user()->fullName() }}</span>
                                     </div>
                                 </button>
                             </div>
@@ -34,10 +34,10 @@
                                 class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
                                 tabindex="-1">
-                                <a href="{{ route('profile') }}"
+                                <a href="{{ route('profile.show', Auth::id()) }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
                                     tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                                <a href="{{ route('edit-profile') }}"
+                                <a href="{{ route('profile.edit', Auth::id()) }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
                                     tabindex="-1" id="user-menu-item-1">Edit Profile</a>
                                 <a href="{{ route('logout') }}"
@@ -103,7 +103,7 @@
                             </svg>
                         </button>
                     </div>
-                @endif
+                @endauth
             </div>
         </div>
 

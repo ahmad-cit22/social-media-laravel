@@ -12,7 +12,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $post->increment('views_count');
-        $user = User::where('id', session('user_id'))->first();
+        $user = Auth::user();
 
         return view('pages.posts.show', compact('post', 'user'));
     }
@@ -25,14 +25,14 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $allowed_tags = '<b><i><p><strong><em><ul><ol><li><a>';
-        $content = $request->content ? strip_tags($request->content, $allowed_tags) : null;
+        $content = strip_tags($request->content, $allowed_tags);
 
-        if (!$content) {
+        if (empty(trim($content))) {
             return redirect()->route('home')->with('error', 'Invalid content! Please write your post properly.');
         }
 
         Post::create([
-            'author_id' => session('user_id'),
+            'author_id' => Auth::id(),
             'content' => $content,
         ]);
 
@@ -41,25 +41,25 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        if (!session('user_id') || session('user_id') !== $post->author_id) {
-            return redirect()->route('home')->with('error', 'You can not edit post of others.');
+        if (!$this->isAuthorized($post)) {
+            return redirect()->route('home')->with('error', 'Sorry! You are not authorized for this action.');
         }
 
-        $user = User::where('id', session('user_id'))->first();
+        $user = Auth::user();
 
         return view('pages.posts.edit', compact('post', 'user'));
     }
 
     public function update(PostRequest $request, Post $post)
     {
-        if (!session('user_id') || session('user_id') !== $post->author_id) {
-            return redirect()->route('posts.index')->with('error', 'You can not update post of others.');
+        if (!$this->isAuthorized($post)) {
+            return redirect()->route('home')->with('error', 'Sorry! You are not authorized for this action.');
         }
 
         $allowed_tags = '<b><i><p><strong><em><ul><ol><li><a>';
-        $content = $request->content ? strip_tags($request->content, $allowed_tags) : null;
+        $content = strip_tags($request->content, $allowed_tags);
 
-        if (!$content) {
+        if (empty(trim($content))) {
             return redirect()->route('home')->with('error', 'Invalid content! Please write your post properly.');
         }
 
@@ -72,12 +72,21 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        if (!session('user_id') || session('user_id') !== $post->author_id) {
-            return redirect()->route('home')->with('error', 'You can not delete post of others.');
+        if (!$this->isAuthorized($post)) {
+            return redirect()->route('home')->with('error', 'Sorry! You are not authorized for this action.');
         }
 
         $post->delete();
 
         return redirect()->route('home')->with('success', 'Post deleted successfully.');
+    }
+
+    protected function isAuthorized(Post $post)
+    {
+        if (!Auth::check() || Auth::id() !== $post->author_id) {
+            return false;
+        }
+
+        return true;
     }
 }

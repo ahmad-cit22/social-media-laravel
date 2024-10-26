@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/load-more-posts', [HomeController::class, 'loadMorePosts'])->name('posts.load-more');
+
 
 // auth routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register-form');
@@ -29,15 +31,9 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::any('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // profile routes
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('edit-profile');
-Route::post('/update-profile', [ProfileController::class, 'update'])->name('update-profile');
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+Route::get('/profile/{user}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 
 // posts routes
-Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
-Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+Route::resource('posts', PostController::class);

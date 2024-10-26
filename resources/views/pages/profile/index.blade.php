@@ -21,9 +21,9 @@
                 <!-- / User Meta -->
             </div>
             <!-- /Profile Info -->
-            @if (session('user_id') && session('user_id') === $user->id)
+            @if (Auth::user() && Auth::id() === $user->id)
                 <!-- Edit Profile Button (Only visible to the profile owner) -->
-                <a href="{{ route('edit-profile') }}" type="button"
+                <a href="{{ route('profile.edit', $user->id) }}" type="button"
                     class="-m-2 flex gap-2 items-center rounded-full px-4 py-2 font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-5 h-5">
