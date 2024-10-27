@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -30,9 +31,16 @@ class PostController extends Controller
             return redirect()->route('home')->with('error', 'Invalid content! Please write your post properly.');
         }
 
+        $picturePath = null;
+
+        if ($request->hasFile('picture')) {
+            $picturePath = $request->file('picture')->store('post_pictures', 'public');
+        }
+
         Post::create([
             'author_id' => Auth::id(),
             'content' => $content,
+            'picture' => $picturePath,
         ]);
 
         return redirect()->route('home')->with('success', 'Post created successfully.');
@@ -61,6 +69,16 @@ class PostController extends Controller
         if (empty(trim($content))) {
             return redirect()->route('home')->with('error', 'Invalid content! Please write your post properly.');
         }
+
+        // $picturePath = null;
+
+        // if ($request->hasFile('picture')) {
+        //     if ($validated['picture'] && Storage::exists('public/' . $validated['picture'])) {
+        //         Storage::delete('public/' . $validated['picture']);
+        //     }
+
+        //     $picturePath = $request->file('picture')->store('post_pictures', 'public');
+        // }
 
         $post->update([
             'content' => $content,

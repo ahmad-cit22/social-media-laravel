@@ -65,31 +65,6 @@
 
 @push('custom-scripts')
     <script>
-        const pictureInput = document.getElementById('picture');
-        const imagePreviewContainer = document.getElementById('image-preview-container');
-        const imagePreview = document.getElementById('image-preview');
-        const removeImageButton = document.getElementById('remove-image');
-
-        // Show image preview on file select
-        pictureInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    imagePreviewContainer.style.display = 'relative';
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Remove image preview
-        removeImageButton.addEventListener('click', function() {
-            pictureInput.value = ''; // Clear the file input
-            imagePreview.src = ''; // Clear the image preview
-            imagePreviewContainer.style.display = 'none'; // Hide the preview container
-        });
-
         document.getElementById('load-more').addEventListener('click', function() {
             const button = this;
             const nextPageUrl = button.getAttribute('data-next-page');

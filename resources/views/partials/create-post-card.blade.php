@@ -7,8 +7,9 @@
         <div class="flex items-start /space-x-3/">
             <!-- User Avatar -->
             <div class="flex-shrink-0">
-                <img class="h-10 w-10 rounded-full object-cover" src="https://avatars.githubusercontent.com/u/831997"
-                    alt="Ahmed Shamim" />
+                <img class="h-10 w-10 rounded-full object-cover"
+                    src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('storage/avatars/def-avatar.jpg') }}"
+                    alt="image-{{ Auth::user()->fullName }}" />
             </div>
             <!-- /User Avatar -->
 
@@ -27,16 +28,14 @@
     @enderror
 
     <!-- create Post Card Bottom -->
-
     <div>
         <!-- Card Bottom Action Buttons -->
         <div class="flex items-center justify-between">
 
-            <div class="flex gap-4 text-gray-600">
+            <div class="flex gap-4 text-gray-600 items-center justify-between">
                 <!-- Upload Picture Button -->
                 <div>
-                    <input type="file" name="picture" id="picture" class="hidden" />
-
+                    <input type="file" name="picture" id="picture" class="hidden" accept="image/*" />
                     <label for="picture"
                         class="-m-2 flex gap-2 text-xs items-center rounded-full p-2 text-gray-600 hover:text-gray-800 cursor-pointer">
                         <span class="sr-only">Picture</span>
@@ -48,6 +47,17 @@
                     </label>
                 </div>
                 <!-- /Upload Picture Button -->
+
+                <!-- Image Preview -->
+                <div id="image-preview-container" class="relative" style="display: none">
+                    <img id="image-preview" class="h-16 w-16 rounded-lg object-cover" alt="Preview" />
+                    <button type="button" id="remove-image"
+                        class="absolute top-[-1px] right-0 px-1 bg-black bg-opacity-25 text-white rounded-full"
+                        style="line-height: normal !important">
+                        &times;
+                    </button>
+                </div>
+                <!-- Image Preview -->
             </div>
 
             <div>
@@ -64,3 +74,31 @@
     <!-- /create Post Card Bottom -->
 </form>
 <!-- /Barta create Post Card -->
+
+@push('custom-scripts')
+    <script>
+        const pictureInput = document.getElementById('picture');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const removeImageButton = document.getElementById('remove-image');
+
+        pictureInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Remove image preview
+        removeImageButton.addEventListener('click', function() {
+            pictureInput.value = '';
+            imagePreview.src = '';
+            imagePreviewContainer.style.display = 'none';
+        });
+    </script>
+@endpush

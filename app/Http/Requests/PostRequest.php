@@ -24,13 +24,16 @@ class PostRequest extends FormRequest
     {
         return [
             'content' => ['required', 'string', 'max:255'],
+            'picture' => ['nullable', 'image', 'max:2024', 'mimes:jpeg,png,jpg,gif,svg,webp'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'required' => "Empty content! Please write your post properly.",
+            'content.required' => 'Empty content! Please write your post properly.',
+            'picture.max' => 'Image size must be 2MB or less.',
+            'picture.mimes' => 'Allowed image formats are: jpeg, png, jpg, gif, svg, webp.',
         ];
     }
 }

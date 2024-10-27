@@ -29,7 +29,7 @@ class ProfileUpdateRequest extends FormRequest
             'username' => ['required', 'string', 'max:255', 'alpha_num', 'unique:users,username,' . Auth::user()->id],
             'bio' => ['nullable', 'string', 'max:255'],
             'new_password' => ['nullable', 'string', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', 'max:16', 'confirmed'],
-            'avatar' => ['nullable', 'image', 'max:1024'],
+            'avatar' => ['nullable', 'image', 'max:1024', 'mimes:jpeg,png,jpg,gif,svg,webp'],
         ];
     }
 
@@ -37,6 +37,8 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'new_password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+            'avatar.max' => 'Image size must be 2MB or less.',
+            'avatar.mimes' => 'Allowed image formats are: jpeg, png, jpg, gif, svg, webp.',
         ];
     }
 }
