@@ -38,6 +38,9 @@
         </section>
         <!-- /Cover Container -->
 
-
+        <h3 class="text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            Posts
+        </h3>
+        @include('partials.post-list')
     </main>
 @endsection

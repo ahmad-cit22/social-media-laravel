@@ -12,17 +12,16 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please login first to access your profile.');
-        }
-
-        return view('pages.profile.index', ['user' => Auth::user()]);
+        //
     }
 
     public function show(User $user)
     {
+        $posts = $user->posts()->latest()->get();
+
         return view('pages.profile.index', [
             'user' => $user,
+            'posts' => $posts,
         ]);
     }
 
@@ -78,5 +77,4 @@ class ProfileController extends Controller
 
         return true;
     }
-
 }

@@ -37,6 +37,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'new_password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+            'avatar.image' => 'Please upload a valid image.',
             'avatar.max' => 'Image size must be 2MB or less.',
             'avatar.mimes' => 'Allowed image formats are: jpeg, png, jpg, gif, svg, webp.',
         ];

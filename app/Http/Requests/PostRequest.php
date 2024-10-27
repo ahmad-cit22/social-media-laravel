@@ -32,6 +32,7 @@ class PostRequest extends FormRequest
     {
         return [
             'content.required' => 'Empty content! Please write your post properly.',
+            'picture.image' => 'Please upload a valid image.',
             'picture.max' => 'Image size must be 2MB or less.',
             'picture.mimes' => 'Allowed image formats are: jpeg, png, jpg, gif, svg, webp.',
         ];
