@@ -37,5 +37,7 @@
             @endif
         </section>
         <!-- /Cover Container -->
+
+
     </main>
 @endsection

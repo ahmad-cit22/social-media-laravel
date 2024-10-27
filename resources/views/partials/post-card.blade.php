@@ -82,17 +82,18 @@
     </header>
 
     <!-- Content -->
-    <div class="py-4 text-gray-700 font-normal">
-        @if ($post->picture)
-            <img src="{{ asset('storage/' . $post->picture) }}"
-                                            alt="image-{{ $post->picture }}"
-                class="min-h-auto w-full rounded-lg object-cover max-h-64 md:max-h-72" />
-        @endif
+    <a href="{{ route('posts.show', $post->id) }}">
+        <div class="py-4 text-gray-700 font-normal">
+            @if ($post->picture)
+                <img src="{{ asset('storage/' . $post->picture) }}" alt="image-{{ $post->picture }}"
+                    class="min-h-auto w-full rounded-lg object-cover max-h-64 md:max-h-72" />
+            @endif
 
-        <p>
-            {{ $post->content }}
-        </p>
-    </div>
+            <p class="mt-1">
+                {{ $post->content }}
+            </p>
+        </div>
+    </a>
 
     <!-- Date Created & View Stat -->
     <div class="flex items-center gap-2 text-gray-500 text-xs my-2">
